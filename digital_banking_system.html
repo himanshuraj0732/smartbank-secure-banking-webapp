@@ -1,0 +1,1806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBI Digital Banking Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-bg: #f8f9fc;
+            --secondary-bg: #ffffff;
+            --accent-blue: #0052cc;
+            --accent-blue-hover: #0747a6;
+            --accent-blue-light: #e8f2ff;
+            --text-primary: #172b4d;
+            --text-secondary: #5e6c84;
+            --text-muted: #8993a4;
+            --border-color: #dfe1e6;
+            --success: #00875a;
+            --success-light: #e3fcef;
+            --danger: #de350b;
+            --danger-light: #ffebe6;
+            --warning: #ff991f;
+            --warning-light: #fff4e6;
+            --info: #0065ff;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --shadow-xl: 0 12px 48px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Login/Register Page Styles */
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .auth-box {
+            background: var(--secondary-bg);
+            border-radius: 20px;
+            padding: 48px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            z-index: 1;
+        }
+
+        .auth-logo {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .auth-logo-icon {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, #0747a6 100%);
+            border-radius: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 32px;
+            color: white;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .auth-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .auth-subtitle {
+            font-size: 15px;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--primary-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background: var(--secondary-bg);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .pin-input {
+            text-align: center;
+            font-size: 24px;
+            letter-spacing: 8px;
+            font-weight: 600;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--accent-blue);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-blue-hover);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        .auth-toggle {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .auth-toggle a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .auth-toggle a:hover {
+            text-decoration: underline;
+        }
+
+        .account-display {
+            background: var(--accent-blue-light);
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .account-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .account-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-blue);
+            letter-spacing: 2px;
+        }
+
+        .info-box {
+            background: var(--info);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Dashboard Styles */
+        .container {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .header {
+            background: var(--secondary-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, #0747a6 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 24px;
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .brand-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+
+        .brand-tagline {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logout-btn {
+            padding: 10px 20px;
+            background: var(--danger-light);
+            color: var(--danger);
+            border: 2px solid var(--danger);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: var(--primary-bg);
+            border-radius: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, #0747a6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .user-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .user-info p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .main-content {
+            padding: 32px 0;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .card {
+            background: var(--secondary-bg);
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: -0.2px;
+        }
+
+        .card-icon {
+            font-size: 24px;
+        }
+
+        .balance-card {
+            grid-column: span 4;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, #0747a6 100%);
+            color: white;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        .balance-card .card-title {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .balance-amount {
+            font-size: 42px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .balance-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-card {
+            grid-column: span 4;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 12px 0 8px 0;
+            letter-spacing: -0.5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .quick-actions {
+            grid-column: span 12;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 24px 16px;
+            background: var(--secondary-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .action-btn:hover {
+            border-color: var(--accent-blue);
+            background: var(--accent-blue-light);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .action-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: var(--accent-blue-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            transition: all 0.3s;
+        }
+
+        .action-btn:hover .action-icon {
+            background: var(--accent-blue);
+            transform: scale(1.1);
+        }
+
+        .action-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .transaction-section {
+            grid-column: span 8;
+        }
+
+        .transaction-list {
+            max-height: 520px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .transaction-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .transaction-list::-webkit-scrollbar-track {
+            background: var(--primary-bg);
+            border-radius: 3px;
+        }
+
+        .transaction-list::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: var(--primary-bg);
+            border-radius: 10px;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .transaction-item:hover {
+            background: var(--border-color);
+            transform: translateX(4px);
+        }
+
+        .transaction-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .transaction-icon-wrapper {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .transaction-icon-wrapper.credit {
+            background: var(--success-light);
+        }
+
+        .transaction-icon-wrapper.debit {
+            background: var(--danger-light);
+        }
+
+        .transaction-details h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .transaction-date {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .transaction-amount {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .transaction-amount.credit {
+            color: var(--success);
+        }
+
+        .transaction-amount.debit {
+            color: var(--danger);
+        }
+
+        .contacts-section {
+            grid-column: span 4;
+        }
+
+        .contact-list {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            background: var(--primary-bg);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .contact-item:hover {
+            background: var(--border-color);
+            transform: translateX(4px);
+        }
+
+        .contact-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, #0747a6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .contact-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .contact-phone {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(9, 30, 66, 0.54);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--secondary-bg);
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 520px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            letter-spacing: -0.3px;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--primary-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            background: var(--secondary-bg);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c9372c;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .qr-container {
+            text-align: center;
+            padding: 32px;
+            background: var(--primary-bg);
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .qr-info {
+            margin-top: 16px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .notification {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            background: var(--secondary-bg);
+            padding: 20px 24px;
+            border-radius: 12px;
+            border-left: 4px solid;
+            box-shadow: var(--shadow-lg);
+            z-index: 2000;
+            animation: slideInRight 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            max-width: 400px;
+            min-width: 320px;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .notification.success {
+            border-left-color: var(--success);
+        }
+
+        .notification.error {
+            border-left-color: var(--danger);
+        }
+
+        .notification.info {
+            border-left-color: var(--info);
+        }
+
+        .notification-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notification-message {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state-text {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        @media (max-width: 1200px) {
+            .actions-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .transaction-section {
+                grid-column: span 12;
+            }
+
+            .contacts-section {
+                grid-column: span 12;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .auth-box {
+                padding: 32px 24px;
+            }
+
+            .container {
+                padding: 0 16px;
+            }
+
+            .header-content {
+                padding: 0 16px;
+            }
+
+            .page-title {
+                font-size: 24px;
+            }
+
+            .balance-card,
+            .stat-card {
+                grid-column: span 12;
+            }
+
+            .actions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .user-info {
+                display: none;
+            }
+
+            .notification {
+                left: 16px;
+                right: 16px;
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth Page (Login/Register) -->
+    <div id="authPage" class="auth-container">
+        <div class="auth-box">
+            <div class="auth-logo">
+                <div class="auth-logo-icon">S</div>
+                <h1 class="auth-title">SBI Digital</h1>
+                <p class="auth-subtitle">Secure Banking Platform</p>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginForm">
+                <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 24px; text-align: center;">Welcome Back</h2>
+                <div class="form-group">
+                    <label class="form-label">Account Number</label>
+                    <input type="text" id="loginAccountNumber" class="form-input" placeholder="Enter your account number" maxlength="10">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">PIN</label>
+                    <input type="password" id="loginPin" class="form-input pin-input" placeholder="••••" maxlength="4">
+                </div>
+                <button class="btn btn-primary" onclick="handleLogin()">
+                    <span>Login</span>
+                </button>
+                <div class="auth-toggle">
+                    Don't have an account? <a href="#" onclick="showRegister()">Create Account</a>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerForm" class="hidden">
+                <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 24px; text-align: center;">Create Account</h2>
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="registerName" class="form-input" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" id="registerEmail" class="form-input" placeholder="your.email@example.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" id="registerPhone" class="form-input" placeholder="Enter 10-digit phone number" maxlength="10">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Create 4-Digit PIN</label>
+                    <input type="password" id="registerPin" class="form-input pin-input" placeholder="••••" maxlength="4">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Confirm PIN</label>
+                    <input type="password" id="registerConfirmPin" class="form-input pin-input" placeholder="••••" maxlength="4">
+                </div>
+                <div class="info-box">
+                    ℹ️ Your account number will be generated automatically after registration
+                </div>
+                <button class="btn btn-primary" onclick="handleRegister()">
+                    <span>Create Account</span>
+                </button>
+                <div class="auth-toggle">
+                    Already have an account? <a href="#" onclick="showLogin()">Login</a>
+                </div>
+            </div>
+
+            <!-- Registration Success -->
+            <div id="registerSuccess" class="hidden">
+                <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 24px; text-align: center; color: var(--success);">✓ Account Created!</h2>
+                <div class="account-display">
+                    <div class="account-label">Your Account Number</div>
+                    <div class="account-number" id="newAccountNumber"></div>
+                </div>
+                <div class="info-box" style="background: var(--success); text-align: center;">
+                    Please save this account number. You'll need it to login.
+                </div>
+                <button class="btn btn-primary" onclick="showLogin()">
+                    <span>Proceed to Login</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard Page -->
+    <div id="dashboardPage" class="hidden">
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo">S</div>
+                    <div>
+                        <div class="brand-name">SBI Digital</div>
+                        <div class="brand-tagline">Banking Platform</div>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <div class="user-profile">
+                        <div class="user-avatar" id="userAvatar">H</div>
+                        <div class="user-info">
+                            <h4 id="headerUserName">User</h4>
+                            <p id="headerAccountNumber">ACC-XXXXXXXXXX</p>
+                        </div>
+                    </div>
+                    <button class="logout-btn" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="container">
+                <h1 class="page-title">Dashboard</h1>
+                <p class="page-subtitle">Welcome back! Here's your financial overview</p>
+
+                <div class="dashboard-grid">
+                    <div class="card balance-card">
+                        <div class="card-title">Available Balance</div>
+                        <div class="balance-amount">₹<span id="balance">1000</span></div>
+                        <div class="balance-change">
+                            <span>💰</span>
+                            <span>Active Account</span>
+                        </div>
+                    </div>
+
+                    <div class="card stat-card">
+                        <div class="card-header">
+                            <div class="card-title">Total Spent</div>
+                            <div class="card-icon">📉</div>
+                        </div>
+                        <div class="stat-value">₹<span id="totalSpent">0</span></div>
+                        <div class="stat-label">This Month</div>
+                    </div>
+
+                    <div class="card stat-card">
+                        <div class="card-header">
+                            <div class="card-title">Total Received</div>
+                            <div class="card-icon">📈</div>
+                        </div>
+                        <div class="stat-value">₹<span id="totalReceived">0</span></div>
+                        <div class="stat-label">This Month</div>
+                    </div>
+
+                    <div class="card quick-actions">
+                        <div class="card-header">
+                            <div class="card-title">Quick Actions</div>
+                        </div>
+                        <div class="actions-grid">
+                            <div class="action-btn" onclick="openModal('transfer')">
+                                <div class="action-icon">💸</div>
+                                <div class="action-label">Transfer</div>
+                            </div>
+                            <div class="action-btn" onclick="openModal('deposit')">
+                                <div class="action-icon">⬆️</div>
+                                <div class="action-label">Deposit</div>
+                            </div>
+                            <div class="action-btn" onclick="openModal('withdraw')">
+                                <div class="action-icon">⬇️</div>
+                                <div class="action-label">Withdraw</div>
+                            </div>
+                            <div class="action-btn" onclick="openModal('billpay')">
+                                <div class="action-icon">📄</div>
+                                <div class="action-label">Pay Bills</div>
+                            </div>
+                            <div class="action-btn" onclick="openModal('qrcode')">
+                                <div class="action-icon">📱</div>
+                                <div class="action-label">QR Pay</div>
+                            </div>
+                            <div class="action-btn" onclick="openModal('recharge')">
+                                <div class="action-icon">📞</div>
+                                <div class="action-label">Recharge</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card transaction-section">
+                        <div class="card-header">
+                            <div class="card-title">Transaction History</div>
+                            <div class="card-icon">📊</div>
+                        </div>
+                        <div class="transaction-list" id="transactionHistory"></div>
+                    </div>
+
+                    <div class="card contacts-section">
+                        <div class="card-header">
+                            <div class="card-title">Quick Contacts</div>
+                            <div class="card-icon">👥</div>
+                        </div>
+                        <div class="contact-list">
+                            <div class="contact-item" onclick="quickTransfer('Rahul Kumar', '9876543210')">
+                                <div class="contact-avatar">R</div>
+                                <div class="contact-info">
+                                    <h4>Rahul Kumar</h4>
+                                    <p class="contact-phone">9876543210</p>
+                                </div>
+                            </div>
+                            <div class="contact-item" onclick="quickTransfer('Priya Sharma', '9876543211')">
+                                <div class="contact-avatar">P</div>
+                                <div class="contact-info">
+                                    <h4>Priya Sharma</h4>
+                                    <p class="contact-phone">9876543211</p>
+                                </div>
+                            </div>
+                            <div class="contact-item" onclick="quickTransfer('Amit Singh', '9876543212')">
+                                <div class="contact-avatar">A</div>
+                                <div class="contact-info">
+                                    <h4>Amit Singh</h4>
+                                    <p class="contact-phone">9876543212</p>
+                                </div>
+                            </div>
+                            <div class="contact-item" onclick="quickTransfer('Sneha Patel', '9876543213')">
+                                <div class="contact-avatar">S</div>
+                                <div class="contact-info">
+                                    <h4>Sneha Patel</h4>
+                                    <p class="contact-phone">9876543213</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals (Transfer, Deposit, Withdraw, etc.) -->
+    <div id="transferModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-header">Transfer Money</h3>
+            <div class="form-group">
+                <label class="form-label">Recipient Name</label>
+                <input type="text" id="transferName" class="form-input" placeholder="Enter recipient name">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Phone Number / Account</label>
+                <input type="text" id="transferPhone" class="form-input" placeholder="Enter phone or account number">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Amount</label>
+                <input type="number" id="transferAmount" class="form-input" placeholder="0.00" min="1">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Note (Optional)</label>
+                <input type="text" id="transferNote" class="form-input" placeholder="Add a note">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="processTransfer()">Send Money</button>
+                <button class="btn btn-secondary" onclick="closeModal('transferModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="depositModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-header">Deposit Money</h3>
+            <div class="form-group">
+                <label class="form-label">Deposit Method</label>
+                <select class="form-select" id="depositMethod">
+                    <option>Cash Deposit</option>
+                    <option>Cheque Deposit</option>
+                    <option>Online Transfer</option>
+                    <option>UPI Deposit</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Amount</label>
+                <input type="number" id="depositAmount" class="form-input" placeholder="0.00" min="1">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="processDeposit()">Deposit</button>
+                <button class="btn btn-secondary" onclick="closeModal('depositModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="withdrawModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-header">Withdraw Money</h3>
+            <div class="form-group">
+                <label class="form-label">Withdrawal Method</label>
+                <select class="form-select" id="withdrawMethod">
+                    <option>ATM Withdrawal</option>
+                    <option>Bank Counter</option>
+                    <option>UPI Transfer</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Amount</label>
+                <input type="number" id="withdrawAmount" class="form-input" placeholder="0.00" min="1">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="processWithdraw()">Withdraw</button>
+                <button class="btn btn-secondary" onclick="closeModal('withdrawModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="billpayModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-header">Pay Bills</h3>
+            <div class="form-group">
+                <label class="form-label">Bill Type</label>
+                <select class="form-select" id="billType">
+                    <option>Electricity Bill</option>
+                    <option>Water Bill</option>
+                    <option>Gas Bill</option>
+                    <option>Internet Bill</option>
+                    <option>Credit Card Bill</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Consumer Number</label>
+                <input type="text" id="consumerNumber" class="form-input" placeholder="Enter consumer number">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Amount</label>
+                <input type="number" id="billAmount" class="form-input" placeholder="0.00" min="1">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="processBillPayment()">Pay Bill</button>
+                <button class="btn btn-secondary" onclick="closeModal('billpayModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="qrcodeModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-header">QR Payment</h3>
+            <div class="qr-container">
+                <div id="qrcode"></div>
+                <div class="qr-info">
+                    <p><strong>Scan to Pay</strong></p>
+                    <p id="qrUserInfo"></p>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeModal('qrcodeModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="rechargeModal" class="modal">
+        <div class="modal-content">
+            <h3 class="modal-header">Mobile Recharge</h3>
+            <div class="form-group">
+                <label class="form-label">Mobile Number</label>
+                <input type="tel" id="rechargeNumber" class="form-input" placeholder="Enter 10-digit mobile number">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Operator</label>
+                <select class="form-select" id="operator">
+                    <option>Airtel</option>
+                    <option>Jio</option>
+                    <option>Vi (Vodafone Idea)</option>
+                    <option>BSNL</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Recharge Plan</label>
+                <select class="form-select" id="rechargePlan">
+                    <option value="99">₹99 - 1.5GB/day, 28 days</option>
+                    <option value="299">₹299 - 2GB/day, 28 days</option>
+                    <option value="479">₹479 - 2GB/day, 56 days</option>
+                    <option value="719">₹719 - 2GB/day, 84 days</option>
+                </select>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="processRecharge()">Recharge</button>
+                <button class="btn btn-secondary" onclick="closeModal('rechargeModal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        // Global variables for current user session
+        let currentUser = null;
+        let balance = 0;
+        let totalSpent = 0;
+        let totalReceived = 0;
+        let transactions = [];
+
+        // Initialize app
+        function initApp() {
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            if (loggedInUser) {
+                currentUser = loggedInUser;
+                loadUserData();
+                showDashboard();
+            } else {
+                showAuthPage();
+            }
+        }
+
+        // Generate unique account number
+        function generateAccountNumber() {
+            return 'ACC' + Math.floor(1000000 + Math.random() * 9000000);
+        }
+
+        // Show/Hide pages
+        function showAuthPage() {
+            document.getElementById('authPage').classList.remove('hidden');
+            document.getElementById('dashboardPage').classList.add('hidden');
+        }
+
+        function showDashboard() {
+            document.getElementById('authPage').classList.add('hidden');
+            document.getElementById('dashboardPage').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('registerSuccess').classList.add('hidden');
+        }
+
+        function showRegister() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+            document.getElementById('registerSuccess').classList.add('hidden');
+        }
+
+        // Handle Registration
+        function handleRegister() {
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const phone = document.getElementById('registerPhone').value.trim();
+            const pin = document.getElementById('registerPin').value;
+            const confirmPin = document.getElementById('registerConfirmPin').value;
+
+            // Validation
+            if (!name || !email || !phone || !pin || !confirmPin) {
+                showNotification('Invalid Input', 'Please fill all fields', 'error');
+                return;
+            }
+
+            if (phone.length !== 10 || isNaN(phone)) {
+                showNotification('Invalid Phone', 'Please enter a valid 10-digit phone number', 'error');
+                return;
+            }
+
+            if (pin.length !== 4 || isNaN(pin)) {
+                showNotification('Invalid PIN', 'PIN must be 4 digits', 'error');
+                return;
+            }
+
+            if (pin !== confirmPin) {
+                showNotification('PIN Mismatch', 'PINs do not match', 'error');
+                return;
+            }
+
+            // Generate account number
+            const accountNumber = generateAccountNumber();
+
+            // Create user object
+            const userData = {
+                accountNumber: accountNumber,
+                name: name,
+                email: email,
+                phone: phone,
+                pin: pin,
+                balance: 1000,
+                totalSpent: 0,
+                totalReceived: 0,
+                transactions: [{
+                    type: 'deposit',
+                    title: 'Account Opened - Welcome Bonus',
+                    amount: 1000,
+                    isCredit: true,
+                    date: new Date().toLocaleString('en-IN', {
+                        day: 'numeric',
+                        month: 'short',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    })
+                }],
+                createdAt: new Date().toISOString()
+            };
+
+            // Save to localStorage
+            localStorage.setItem('user_' + accountNumber, JSON.stringify(userData));
+
+            // Show success screen
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('registerSuccess').classList.remove('hidden');
+            document.getElementById('newAccountNumber').textContent = accountNumber;
+
+            // Clear form
+            document.getElementById('registerName').value = '';
+            document.getElementById('registerEmail').value = '';
+            document.getElementById('registerPhone').value = '';
+            document.getElementById('registerPin').value = '';
+            document.getElementById('registerConfirmPin').value = '';
+
+            showNotification('Account Created', 'Your account has been created successfully!', 'success');
+        }
+
+        // Handle Login
+        function handleLogin() {
+            const accountNumber = document.getElementById('loginAccountNumber').value.trim();
+            const pin = document.getElementById('loginPin').value;
+
+            if (!accountNumber || !pin) {
+                showNotification('Invalid Input', 'Please enter account number and PIN', 'error');
+                return;
+            }
+
+            // Retrieve user data
+            const userDataStr = localStorage.getItem('user_' + accountNumber);
+
+            if (!userDataStr) {
+                showNotification('Account Not Found', 'No account exists with this number', 'error');
+                return;
+            }
+
+            const userData = JSON.parse(userDataStr);
+
+            if (userData.pin !== pin) {
+                showNotification('Invalid PIN', 'The PIN you entered is incorrect', 'error');
+                return;
+            }
+
+            // Login successful
+            currentUser = accountNumber;
+            localStorage.setItem('loggedInUser', accountNumber);
+            loadUserData();
+            showDashboard();
+            showNotification('Login Successful', `Welcome back, ${userData.name}!`, 'success');
+
+            // Clear form
+            document.getElementById('loginAccountNumber').value = '';
+            document.getElementById('loginPin').value = '';
+        }
+
+        // Load user data
+        function loadUserData() {
+            const userDataStr = localStorage.getItem('user_' + currentUser);
+            if (!userDataStr) return;
+
+            const userData = JSON.parse(userDataStr);
+            balance = userData.balance || 1000;
+            totalSpent = userData.totalSpent || 0;
+            totalReceived = userData.totalReceived || 0;
+            transactions = userData.transactions || [];
+
+            // Update UI
+            document.getElementById('headerUserName').textContent = userData.name;
+            document.getElementById('headerAccountNumber').textContent = userData.accountNumber;
+            document.getElementById('userAvatar').textContent = userData.name.charAt(0).toUpperCase();
+
+            updateBalance();
+            rebuildTransactionHistory();
+        }
+
+        // Save user data
+        function saveUserData() {
+            if (!currentUser) return;
+
+            const userDataStr = localStorage.getItem('user_' + currentUser);
+            if (!userDataStr) return;
+
+            const userData = JSON.parse(userDataStr);
+            userData.balance = balance;
+            userData.totalSpent = totalSpent;
+            userData.totalReceived = totalReceived;
+            userData.transactions = transactions;
+
+            localStorage.setItem('user_' + currentUser, JSON.stringify(userData));
+        }
+
+        // Handle Logout
+        function handleLogout() {
+            localStorage.removeItem('loggedInUser');
+            currentUser = null;
+            balance = 0;
+            totalSpent = 0;
+            totalReceived = 0;
+            transactions = [];
+            showAuthPage();
+            showLogin();
+            showNotification('Logged Out', 'You have been logged out successfully', 'info');
+        }
+
+        // Update balance display
+        function updateBalance() {
+            document.getElementById('balance').textContent = balance.toLocaleString();
+            document.getElementById('totalSpent').textContent = totalSpent.toLocaleString();
+            document.getElementById('totalReceived').textContent = totalReceived.toLocaleString();
+        }
+
+        // Rebuild transaction history
+        function rebuildTransactionHistory() {
+            const historyContainer = document.getElementById('transactionHistory');
+            historyContainer.innerHTML = '';
+
+            if (transactions.length === 0) {
+                historyContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <div class="empty-state-text">No transactions yet</div>
+                    </div>
+                `;
+                return;
+            }
+
+            transactions.forEach(transaction => {
+                const transactionElement = createTransactionElement(transaction);
+                historyContainer.appendChild(transactionElement);
+            });
+        }
+
+        // Create transaction element
+        function createTransactionElement(transaction) {
+            const transactionElement = document.createElement('div');
+            transactionElement.className = 'transaction-item';
+
+            const icons = {
+                transfer: '💸',
+                deposit: '⬆️',
+                withdraw: '⬇️',
+                bill: '📄',
+                recharge: '📞'
+            };
+
+            transactionElement.innerHTML = `
+                <div class="transaction-left">
+                    <div class="transaction-icon-wrapper ${transaction.isCredit ? 'credit' : 'debit'}">
+                        ${icons[transaction.type] || '💰'}
+                    </div>
+                    <div class="transaction-details">
+                        <h4>${transaction.title}</h4>
+                        <p class="transaction-date">${transaction.date}</p>
+                    </div>
+                </div>
+                <div class="transaction-amount ${transaction.isCredit ? 'credit' : 'debit'}">
+                    ${transaction.isCredit ? '+' : '-'}₹${transaction.amount.toLocaleString()}
+                </div>
+            `;
+
+            return transactionElement;
+        }
+
+        // Add transaction
+        function addTransaction(type, title, amount, isCredit) {
+            const transaction = {
+                type,
+                title,
+                amount,
+                isCredit,
+                date: new Date().toLocaleString('en-IN', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })
+            };
+
+            transactions.unshift(transaction);
+
+            const historyContainer = document.getElementById('transactionHistory');
+            const emptyState = historyContainer.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.remove();
+            }
+
+            const transactionElement = createTransactionElement(transaction);
+            transactionElement.style.animation = 'slideUp 0.3s ease';
+            historyContainer.insertBefore(transactionElement, historyContainer.firstChild);
+
+            saveUserData();
+        }
+
+        // Show notification
+        function showNotification(title, message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+
+            const icons = {
+                success: '✓',
+                error: '✕',
+                info: 'ℹ'
+            };
+
+            notification.innerHTML = `
+                <div class="notification-title">${icons[type]} ${title}</div>
+                <div class="notification-message">${message}</div>
+            `;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.style.animation = 'slideInRight 0.3s ease reverse';
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
+        }
+
+        // Modal functions
+        function openModal(modalType) {
+            const modalId = modalType + 'Modal';
+            document.getElementById(modalId).classList.add('active');
+
+            if (modalType === 'qrcode') {
+                generateQRCode();
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('active');
+
+            if (modalId === 'qrcodeModal') {
+                document.getElementById('qrcode').innerHTML = '';
+            }
+        }
+
+        // Transaction processing functions
+        function processTransfer() {
+            const name = document.getElementById('transferName').value.trim();
+            const phone = document.getElementById('transferPhone').value.trim();
+            const amount = parseInt(document.getElementById('transferAmount').value);
+
+            if (!name || !phone || !amount || amount <= 0) {
+                showNotification('Invalid Input', 'Please fill all required fields correctly', 'error');
+                return;
+            }
+
+            if (amount > balance) {
+                showNotification('Insufficient Balance', `You only have ₹${balance.toLocaleString()} available`, 'error');
+                return;
+            }
+
+            balance -= amount;
+            totalSpent += amount;
+            updateBalance();
+            addTransaction('transfer', `Transfer to ${name}`, amount, false);
+
+            closeModal('transferModal');
+            showNotification('Transfer Successful', `₹${amount.toLocaleString()} sent to ${name}`, 'success');
+
+            document.getElementById('transferName').value = '';
+            document.getElementById('transferPhone').value = '';
+            document.getElementById('transferAmount').value = '';
+            document.getElementById('transferNote').value = '';
+        }
+
+        function processDeposit() {
+            const method = document.getElementById('depositMethod').value;
+            const amount = parseInt(document.getElementById('depositAmount').value);
+
+            if (!amount || amount <= 0) {
+                showNotification('Invalid Amount', 'Please enter a valid amount', 'error');
+                return;
+            }
+
+            balance += amount;
+            totalReceived += amount;
+            updateBalance();
+            addTransaction('deposit', `Deposit via ${method}`, amount, true);
+
+            closeModal('depositModal');
+            showNotification('Deposit Successful', `₹${amount.toLocaleString()} added to your account`, 'success');
+
+            document.getElementById('depositAmount').value = '';
+        }
+
+        function processWithdraw() {
+            const method = document.getElementById('withdrawMethod').value;
+            const amount = parseInt(document.getElementById('withdrawAmount').value);
+
+            if (!amount || amount <= 0) {
+                showNotification('Invalid Amount', 'Please enter a valid amount', 'error');
+                return;
+            }
+
+            if (amount > balance) {
+                showNotification('Insufficient Balance', `You only have ₹${balance.toLocaleString()} available`, 'error');
+                return;
+            }
+
+            balance -= amount;
+            totalSpent += amount;
+            updateBalance();
+            addTransaction('withdraw', `Withdrawal via ${method}`, amount, false);
+
+            closeModal('withdrawModal');
+            showNotification('Withdrawal Successful', `₹${amount.toLocaleString()} withdrawn`, 'success');
+
+            document.getElementById('withdrawAmount').value = '';
+        }
+
+        function processBillPayment() {
+            const billType = document.getElementById('billType').value;
+            const consumerNumber = document.getElementById('consumerNumber').value.trim();
+            const amount = parseInt(document.getElementById('billAmount').value);
+
+            if (!consumerNumber || !amount || amount <= 0) {
+                showNotification('Invalid Input', 'Please fill all fields correctly', 'error');
+                return;
+            }
+
+            if (amount > balance) {
+                showNotification('Insufficient Balance', `You only have ₹${balance.toLocaleString()} available`, 'error');
+                return;
+            }
+
+            balance -= amount;
+            totalSpent += amount;
+            updateBalance();
+            addTransaction('bill', `${billType} Payment`, amount, false);
+
+            closeModal('billpayModal');
+            showNotification('Bill Payment Successful', `${billType} paid successfully`, 'success');
+
+            document.getElementById('consumerNumber').value = '';
+            document.getElementById('billAmount').value = '';
+        }
+
+        function processRecharge() {
+            const number = document.getElementById('rechargeNumber').value.trim();
+            const operator = document.getElementById('operator').value;
+            const amount = parseInt(document.getElementById('rechargePlan').value);
+
+            if (!number || number.length !== 10) {
+                showNotification('Invalid Number', 'Please enter a valid 10-digit mobile number', 'error');
+                return;
+            }
+
+            if (amount > balance) {
+                showNotification('Insufficient Balance', `You only have ₹${balance.toLocaleString()} available`, 'error');
+                return;
+            }
+
+            balance -= amount;
+            totalSpent += amount;
+            updateBalance();
+            addTransaction('recharge', `${operator} Recharge - ${number}`, amount, false);
+
+            closeModal('rechargeModal');
+            showNotification('Recharge Successful', `₹${amount} recharge completed for ${number}`, 'success');
+
+            document.getElementById('rechargeNumber').value = '';
+        }
+
+        function generateQRCode() {
+            const userDataStr = localStorage.getItem('user_' + currentUser);
+            if (!userDataStr) return;
+
+            const userData = JSON.parse(userDataStr);
+            const qrData = `upi://pay?pa=${userData.accountNumber}@sbi&pn=${userData.name}&cu=INR`;
+
+            document.getElementById('qrcode').innerHTML = '';
+            new QRCode(document.getElementById('qrcode'), {
+                text: qrData,
+                width: 200,
+                height: 200,
+                colorDark: '#000000',
+                colorLight: '#ffffff',
+            });
+
+            document.getElementById('qrUserInfo').textContent = `${userData.name} | ${userData.accountNumber}`;
+        }
+
+        function quickTransfer(name, phone) {
+            openModal('transfer');
+            document.getElementById('transferName').value = name;
+            document.getElementById('transferPhone').value = phone;
+            document.getElementById('transferAmount').focus();
+        }
+
+        // Event listeners
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                closeModal(event.target.id);
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modals = document.querySelectorAll('.modal.active');
+                modals.forEach(modal => closeModal(modal.id));
+            }
+        });
+
+        // Initialize app on load
+        window.addEventListener('DOMContentLoaded', function() {
+            initApp();
+        });
+    </script>
+</body>
+</html>
